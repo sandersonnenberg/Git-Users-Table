@@ -1,0 +1,10 @@
+
+  .users-table {
+    border: 1px solid #f0f0f0;
+  }
+  .ant-table-cell {
+    text-align: center !important;
+  }
+  .avatar{
+    width: 100px;
+  }

@@ -1,0 +1,10 @@
+.search-section{
+    display: flex;
+}
+.search-input{
+    width: 90%;
+    display: block;
+}
+.search-button{display: block;
+    width: 10%;
+    height: 40px;}
