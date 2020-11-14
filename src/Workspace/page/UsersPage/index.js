@@ -14,7 +14,7 @@ export default function UsersPage() {
   );
   const apiPath = "https://api.github.com/search/users?q=";
   const apiHeaders={
-    "Authorization": `Token 33511678bddad7800d62427545a0f188db2bc126` 
+    "Authorization": `Token d2f96a3613a07e5e61dde2b3344b533033c07664` 
   }
   const [userFound, setUserFound] = useState(null);
   const [addingUser,setAddingUser]=useState(false);

@@ -72,7 +72,7 @@ export default function UsersTable({ data }) {
               onClick={() => requestSort("public_repos")}
               className={getClassNamesFor("public_repos")}
             >
-              Number of reposetories
+              Number of Repositories
             </button>
           </th>
           <th className="headers">
