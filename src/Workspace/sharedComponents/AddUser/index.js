@@ -25,27 +25,13 @@ export default function AddUser({ addUserResponse }) {
           rules={[
             {
               required: true,
-              message: "Please insert your login name!",
-            },
-          ]}
-        >
-          <Input
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="User Login Name"
-          />
-        </Form.Item>
-        <Form.Item
-          name="user_name"
-          rules={[
-            {
-              required: true,
               message: "Please insert your user name!",
             },
           ]}
         >
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="User Name"
+            placeholder="Username"
           />
         </Form.Item>
         <Form.Item
@@ -59,7 +45,7 @@ export default function AddUser({ addUserResponse }) {
         >
           <Input
            
-            placeholder="User Password"
+            placeholder="Password"
           />
         </Form.Item>
         <Form.Item
@@ -74,7 +60,7 @@ export default function AddUser({ addUserResponse }) {
           <Input
             type="email"
             prefix={<MailOutlined  className="site-form-item-icon" />}
-            placeholder="User e-mail"
+            placeholder="e-mail"
           />
         </Form.Item>
         <Form.Item
@@ -89,7 +75,7 @@ export default function AddUser({ addUserResponse }) {
           <Input
             prefix={<FileImageOutlined className="site-form-item-icon" />}
             type="url"
-            placeholder="User Image URL"
+            placeholder="Image URL"
           />
         </Form.Item>
         <br/>
