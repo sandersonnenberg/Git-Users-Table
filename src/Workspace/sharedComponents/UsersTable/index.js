@@ -83,7 +83,7 @@ export default function UsersTable({ data }) {
       <tbody className="table-body">
         {items.map((item) => (
           <tr className="table-row" key={item.id}>
-            <td className="table-cell   user-id">{item.id}</td>
+            <td className="table-cell user-id">{item.id}</td>
             <td className="table-cell">{item.login}</td>
             <td className="table-cell">{item.public_repos}</td>
             <td className="table-cell">
