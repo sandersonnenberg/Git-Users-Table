@@ -73,7 +73,8 @@ export default function UsersPage() {
 
   //page handler for the response from the API
   function handleApiResponse(response) {
-    if (response.total_count > 0) {
+
+    if (response.length > 0) {
       setData({ response });
       setUserFound(true);
     } else setUserFound(false);

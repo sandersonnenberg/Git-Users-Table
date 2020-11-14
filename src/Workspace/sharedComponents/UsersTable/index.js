@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import "./styles.css";
 import { Popover } from "antd";
 import PropTypes from "prop-types";
@@ -8,7 +8,7 @@ export default function UsersTable({ data }) {
   const useSortableData = (items, config = null) => {
     const [sortConfig, setSortConfig] = useState(config);
 
-    const sortedItems = React.useMemo(() => {
+    const sortedItems = useMemo(() => {
       let sortableItems = [...items];
       if (sortConfig !== null) {
         sortableItems.sort((a, b) => {
@@ -36,7 +36,7 @@ export default function UsersTable({ data }) {
   };
 
   const { items, requestSort, sortConfig } = useSortableData(
-    data.response.items
+    data.response
   );
   const getClassNamesFor = (name) => {
     if (!sortConfig) {

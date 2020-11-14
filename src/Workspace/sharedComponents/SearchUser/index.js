@@ -64,21 +64,18 @@ export default function SearchUser({
     fetch(path)
       .then((response) => response.json())
       .then((data) => {
-      
-      data.items.forEach(element => {
-        fetch("https://api.github.com/users/"+element.login,{
-          "method": "GET",
-          "headers": apiHeaders
+        let requests = data.items.map(item => fetch(`https://api.github.com/users/${item.login}`,{
+              "method": "GET",
+              "headers": apiHeaders
+            }));
+        Promise.all(requests)
+        .then(responses => {  
+          return responses;
         })
-        .then((response) => response.json())
-        .then((res => {
-          element.public_repos=res.public_repos;
-        }))
-      })
-      apiResponse(data);
-      
-    })
-    
+        .then(responses => Promise.all(responses.map(r => r.json())))
+        .then((data) =>{apiResponse(data)});
+
+      });
   }
 }
 
