@@ -1,0 +1,14 @@
+
+
+.add-user-container h3{
+    text-align: center;
+}
+#horizontal_login{
+    width: 250px;
+}
+.add-button{
+    position: relative;
+    display: block;    
+}
+
+

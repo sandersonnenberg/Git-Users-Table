@@ -6,8 +6,10 @@ import "./styles.css";
 
 export default function SearchUser({
   apiPath,
+  apiHeaders,
   apiResponse,
   fetchStarted,
+  handleUserToSearch
 }) {
   const [path] = useState(apiPath);
   const [shouldDisableButton, setShouldDisableButton] = useState(true);
@@ -49,35 +51,41 @@ export default function SearchUser({
     }
   }
 
-  //handle the searchButton event
+  //handle the search event
   function handleOnSearch() {
+    handleUserToSearch(userToSearch);
     const fullApiPath = path + userToSearch;
-    getDataByTransactionID(fullApiPath);
+    getDataByUser(fullApiPath);
   }
 
-  //get data for By Transaction ID
-  function getDataByTransactionID(path) {
+  //get data for By User ID
+  function getDataByUser(path) {
     fetchStarted(true);
     fetch(path)
       .then((response) => response.json())
       .then((data) => {
       
       data.items.forEach(element => {
-        fetch("https://api.github.com/users/"+element.login)
+        fetch("https://api.github.com/users/"+element.login,{
+          "method": "GET",
+          "headers": apiHeaders
+        })
         .then((response) => response.json())
         .then((res => {
           element.public_repos=res.public_repos;
         }))
       })
-     
-      apiResponse(data); 
-    });
+      apiResponse(data);
+      
+    })
     
   }
 }
 
 SearchUser.propTypes = {
   apiPath: PropTypes.string.isRequired,
+  apiHeaders: PropTypes.object.isRequired,
   apiResponse: PropTypes.func.isRequired,
   fetchStarted: PropTypes.func.isRequired,
+  handleUserToSearch: PropTypes.func.isRequired
 };

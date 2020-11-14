@@ -1,72 +1,139 @@
-import "antd/dist/antd.css";
-import React from "react";
-import PropTypes from "prop-types";
-import { Table } from "antd";
+import React, { useState } from "react";
 import "./styles.css";
+import { Popover } from "antd";
+import PropTypes from "prop-types";
 
 export default function UsersTable({ data }) {
 
-  const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      sorter: (a, b) => a.id - b.id,
-    },
-    {
-      title: 'Login',
-      dataIndex: 'login',
-      sorter:  (a, b) => a.login.toLowerCase() < b.login.toLowerCase()
+  const useSortableData = (items, config = null) => {
+    const [sortConfig, setSortConfig] = useState(config);
 
-    },
-    {
-      title: 'Number of reposetories',
-      dataIndex: 'public_repos',
-      sorter: (a, b) => a.public_repos - b.public_repos,
-    },
-    {
-      title: 'Avatar',
-      dataIndex: 'avatar',
-      render: (avatar)=> (
-        <>
-          <img alt={avatar} className="avatar" src={avatar} />
-        </>
-      )
-    },
-  ];
+    const sortedItems = React.useMemo(() => {
+      let sortableItems = [...items];
+      if (sortConfig !== null) {
+        sortableItems.sort((a, b) => {
+          if (typeof (a[sortConfig.key])!== "number")
+            return sortByString(a, b, sortConfig);
+          else return sortByNumbers(a, b, sortConfig);
+        });
+      }
+      return sortableItems;
+    }, [items, sortConfig]);
 
-  const tableData = [];
-  data.response.items.forEach((element) => {
-    tableData.push({
-      key: element.id,
-      id: element.id.toString(),
-      login: element.login.toLowerCase(),
-      avatar: element.avatar_url,
-      public_repos: element.public_repos,
-    });
-  });
-  return (
-    <div>
-      <Table columns={columns} className="users-table" dataSource={tableData}>
-        {/* <Column title="ID" dataIndex="id" key="id" />
-        <Column title="Login" dataIndex="login" key="login" />
-        <Column
-          title="Number of reposetories"
-          dataIndex="public_repos"
-          key="public_repos"
-        />
-        <Column
-          title="Avatar"
-          dataIndex="avatar"
-          key="avatar"
-          render={(avatar) => (
-            <>
-              <img alt={avatar} className="avatar" src={avatar} />
-            </>
-          )}
-        /> */}
-      </Table>
-    </div>
+    const requestSort = (key) => {
+      let direction = "ascending";
+      if (
+        sortConfig &&
+        sortConfig.key === key &&
+        sortConfig.direction === "ascending"
+      ) {
+        direction = "descending";
+      }
+      setSortConfig({ key, direction });
+    };
+
+    return { items: sortedItems, requestSort, sortConfig };
+  };
+
+  const { items, requestSort, sortConfig } = useSortableData(
+    data.response.items
   );
+  const getClassNamesFor = (name) => {
+    if (!sortConfig) {
+      return;
+    }
+    return sortConfig.key === name ? sortConfig.direction : undefined;
+  };
+  return (
+    <table className="users-table">
+      <thead>
+        <tr>
+          <th className="headers">
+            <button
+              type="button"
+              onClick={() => requestSort("id")}
+              className={getClassNamesFor("id")}
+            >
+              ID
+            </button>
+          </th>
+          <th className="headers">
+            <button
+              type="button"
+              onClick={() => requestSort("login")}
+              className={getClassNamesFor("login")}
+            >
+              Login
+            </button>
+          </th>
+          <th className="headers">
+            <button
+              type="button"
+              onClick={() => requestSort("public_repos")}
+              className={getClassNamesFor("public_repos")}
+            >
+              Number of reposetories
+            </button>
+          </th>
+          <th className="headers">
+            <p>Avatar</p>
+          </th>
+        </tr>
+      </thead>
+      <tbody className="table-body">
+        {items.map((item) => (
+          <tr className="table-row" key={item.id}>
+            <td className="table-cell   user-id">{item.id}</td>
+            <td className="table-cell">{item.login}</td>
+            <td className="table-cell">{item.public_repos}</td>
+            <td className="table-cell">
+              <Popover content={content(item.avatar_url)}>
+                <img
+                  alt={item.avatar_url}
+                  className="avatar"
+                  src={item.avatar_url}
+                />
+              </Popover>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+
+  function sortByNumbers(a, b, sortConfig) {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === "ascending" ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === "ascending" ? 1 : -1;
+    }
+    return 0;
+  }
+
+  function content (content)  {
+    return(
+      <img alt={content} className="avatar-big" src={content} />
+      )
+}
+
+  function sortByString(a, b, sortConfig) {
+    if(a[sortConfig.key]===undefined|| b[sortConfig.key]===undefined)
+    return 0;
+    if (
+      a[sortConfig.key].toLowerCase().toString() <
+      b[sortConfig.key].toLowerCase().toString()
+    ) {
+      return sortConfig.direction === "ascending" ? -1 : 1;
+    }
+    if (
+      a[sortConfig.key].toLowerCase().toString() >
+      b[sortConfig.key].toLowerCase().toString()
+    ) {
+      return sortConfig.direction === "ascending" ? 1 : -1;
+    }
+    return 0;
+  }
 }
 
 UsersTable.propTypes = {

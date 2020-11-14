@@ -2,3 +2,18 @@
     max-width:50%;
     margin:auto;
 }
+h1{
+    text-align: center;
+}
+
+.upper-bar{
+    width: 100%;
+    position: relative;
+    height: 50px;
+}
+.add-user-btn{
+    height: 40px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+}
